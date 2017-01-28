@@ -1,0 +1,3 @@
+export const GET_USERS = "GET_USERS"
+export const DATA_USERS_CHANGE = "DATA_USERS_CHANGE"
+

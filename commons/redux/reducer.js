@@ -1,6 +1,10 @@
 import initialState from './initialState';
 
-const reducers = [];
+import { reducer as usersReducer } from './getUsers'
+
+const reducers = [
+    usersReducer
+];
 
 export default function reducer(state = initialState, action) {
     let newState;
