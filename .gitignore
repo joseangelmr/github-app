@@ -19,6 +19,9 @@ logs
 .idea/misc.xml
 .idea/modules.xml
 .idea/vcs.xml
+.idea/file.template.settings.xml
+.idea/jsLibraryMappings.xml
+.idea/typescript-compiler.xml
 
 # Gradle:
 .idea/gradle.xml
