@@ -1,12 +1,21 @@
 import Layout from "../client/containers/Layout";
+import Home from "../client/containers/Home";
+
+import usersRoute from './../client/features/users/route'
 
 const routes = [{
     path: '/',
-    component: Layout
+    component: Layout,
+    indexRoute: {
+        component : Home
+    },
+    childRoutes : [
+        usersRoute
+    ]
 }];
 
 function handleIndexRoute(route) {
-    
+
     if (!route.childRoutes || !route.childRoutes.length) {
         return;
     }

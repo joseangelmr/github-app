@@ -1,6 +1,13 @@
 import initialState from './initialState';
 
-const reducers = [];
+import { reducer as usersReducer } from './getUsers'
+import { reducer as searchReducer } from './searchUsers'
+
+
+const reducers = [
+    usersReducer,
+    searchReducer
+];
 
 export default function reducer(state = initialState, action) {
     let newState;
