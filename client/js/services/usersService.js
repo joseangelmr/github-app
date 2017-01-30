@@ -4,11 +4,15 @@
 import got from 'got';
 import { USERS_URL, SEARCH_USERS_URL } from './constants'
 
-export function getUsers() {
+export function getUsers(since) {
     return new Promise(
         function (resolve, reject) {
-
-            got.post(USERS_URL)
+            
+            got.post(USERS_URL, {
+                query : {
+                    since
+                }
+            })
                 .then(response => {
                     return resolve(JSON.parse(response.body));
                 })

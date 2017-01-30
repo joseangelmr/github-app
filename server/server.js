@@ -8,11 +8,12 @@ const app = express();
 const compiler = webpack(config);
 const since = 0;
 
-function getUsers() {
+function getUsers(query) {
     const URL = 'https://api.github.com/users'
     return got.get(URL, {
         query: {
-            since: since
+            since: query.since,
+            per_page : 100
         }
     })
 }
@@ -21,7 +22,8 @@ function searchUsers(query) {
     const URL = 'https://api.github.com/search/users'
     return got.get(URL, {
         query: {
-            q : query.q
+            q : query.q,
+            per_page : 100
         }
     })
 }
@@ -37,7 +39,7 @@ app.get('/', function (req, res) {
 });
 
 app.post('/users', function (req, res) {
-    getUsers()
+    getUsers(req.query)
         .then(response => {
             res.send(response.body)
         })

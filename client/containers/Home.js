@@ -13,8 +13,10 @@ import _ from 'lodash'
 import {connect} from 'react-redux';
 import * as actions from '../../commons/redux/actions';
 import Avatar from 'material-ui/Avatar';
+import FavoriteIcon from 'material-ui/svg-icons/action/favorite';
 import NoFavoriteIcon from 'material-ui/svg-icons/action/favorite-border';
 import CircularProgress from 'material-ui/CircularProgress';
+
 
 
 export class Home extends Component {
@@ -36,6 +38,10 @@ export class Home extends Component {
             isLoading: true
         }
 
+    }
+
+    componentWillMount(){
+        this.props.clean()
     }
 
     renderFilter() {
@@ -73,6 +79,16 @@ export class Home extends Component {
 
     }
 
+    isFav(login) {
+
+        const fav = _.find(this.props.favorites, {'login': login});
+        
+        if (fav)
+            return true
+        else
+            return false
+    }
+
     renderUsers() {
 
         if (this.props.filter) {
@@ -89,7 +105,10 @@ export class Home extends Component {
                                         key={ i }
                                         primaryText={ user.login }
                                         leftAvatar={<Avatar src={ user.avatar_url } />}
-                                        rightIcon={<NoFavoriteIcon/>}
+                                        rightIcon={
+                                           this.isFav(user.login) ? <FavoriteIcon onClick={ () => { this.props.removeFavorite(user, i) }}/> :
+                                           <NoFavoriteIcon onClick={ () => { this.props.setFavorite(user) }}/>
+                                        }
                                     />
                                 )
                             })
@@ -270,7 +289,8 @@ export class Home extends Component {
 function mapStateToProps(state) {
     return {
         filter: state.global.filter,
-        isLoading: state.global.isLoading
+        isLoading: state.global.isLoading,
+        favorites: state.global.favorites
     };
 }
 function mapDispatchToProps(dispatch) {
@@ -283,6 +303,12 @@ function mapDispatchToProps(dispatch) {
                 type: 'DATA_SEARCH_USERS_CHANGE',
                 data: []
             })
+        },
+        setFavorite : (user) => {
+            dispatch(actions.setFavorite(user))
+        },
+        removeFavorite : (user) => {
+            dispatch(actions.removeFavorite(user))
         }
     };
 }

@@ -4,28 +4,33 @@
 import { GET_USERS, DATA_USERS_CHANGE } from './constants';
 import { getUsers as getDataUsers } from '../../client/js/services/'
 import update from 'react-addons-update';
+import _ from 'lodash'
 
 
-export function receiveUsers(data) {
+export function receiveUsers(data, since) {
     return {
         type: DATA_USERS_CHANGE,
-        data
+        data,
+        since
     }
 }
 
-export function requestUsers() {
+export function requestUsers(last_since) {
     return {
-        type: GET_USERS
+        type: GET_USERS,
+        last_since
     }
 }
 
-export function getUsers() {
+export function getUsers(since) {
+    
     return dispatch => {
 
-        dispatch(requestUsers())
+        dispatch(requestUsers(since))
 
-        getDataUsers().then(response => {
-            dispatch(receiveUsers(response))
+        getDataUsers(since).then(response => {
+            const last = _.last(response)
+            dispatch(receiveUsers(response, last.id ))
         })
             .catch(error => {
 
@@ -43,6 +48,9 @@ export function reducer(state, action) {
                 },
                 isLoading : {
                     $set: false
+                },
+                since : {
+                    $set: action.since
                 }
             })
 
@@ -50,6 +58,9 @@ export function reducer(state, action) {
             return update(state, {
                 isLoading : {
                     $set: true
+                },
+                last_since : {
+                    $set : action.last_since
                 }
             })
 
