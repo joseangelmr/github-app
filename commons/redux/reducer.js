@@ -1,9 +1,12 @@
 import initialState from './initialState';
 
 import { reducer as usersReducer } from './getUsers'
+import { reducer as searchReducer } from './searchUsers'
+
 
 const reducers = [
-    usersReducer
+    usersReducer,
+    searchReducer
 ];
 
 export default function reducer(state = initialState, action) {

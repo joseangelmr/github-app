@@ -1,8 +1,9 @@
 /**
  * Created by joseangelmr on 28/1/17.
  */
-import { getUsers } from './usersService'
+import { getUsers, searchUsers } from './usersService'
 
 export {
-    getUsers
+    getUsers,
+    searchUsers
 };

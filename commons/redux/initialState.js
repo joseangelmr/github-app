@@ -1,6 +1,8 @@
 const initialState = {
     users : [],
-    isLoading: false
+    isLoading: false,
+    filter : null,
+    favorites : []
 };
 
 export default initialState;

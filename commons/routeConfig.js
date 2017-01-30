@@ -1,9 +1,14 @@
 import Layout from "../client/containers/Layout";
+import Home from "../client/containers/Home";
+
 import usersRoute from './../client/features/users/route'
 
 const routes = [{
     path: '/',
     component: Layout,
+    indexRoute: {
+        component : Home
+    },
     childRoutes : [
         usersRoute
     ]
