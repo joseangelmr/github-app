@@ -17,6 +17,15 @@ function getUsers() {
     })
 }
 
+function searchUsers(query) {
+    const URL = 'https://api.github.com/search/users'
+    return got.get(URL, {
+        query: {
+            q : query.q
+        }
+    })
+}
+
 app.use(require('webpack-dev-middleware')(compiler, {
     publicPath: config.output.publicPath
 }));
@@ -37,6 +46,18 @@ app.post('/users', function (req, res) {
             res.send(error);
         });
 })
+
+app.get('/search/users', function (req, res) {
+    searchUsers(req.query)
+        .then(response => {
+            res.send(response.body)
+        })
+        .catch(error => {
+            console.log('err', error)
+            res.send(error);
+        });
+})
+
 
 app.listen(3000, 'localhost', (err) => {
     if (err) {
