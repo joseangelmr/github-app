@@ -25,7 +25,7 @@ export class Users extends Component {
     }
 
     componentWillMount() {
-        this.props.getUsers(this.props.since)
+        this.props.getUsers(this.props.since != 0 ? 0 : this.props.since)
     }
 
 

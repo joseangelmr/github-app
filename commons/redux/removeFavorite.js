@@ -3,6 +3,7 @@
  */
 import { REMOVE_FAVORITE } from './constants';
 import update from 'react-addons-update';
+import _ from 'lodash'
 
 export function removeFavorite(user, index) {
     return {
@@ -17,11 +18,13 @@ export function reducer(state, action) {
     switch (action.type) {
         case REMOVE_FAVORITE:
 
+            const _update = _.remove(state.favorites, function(user, i) {
+                return user.login != action.user.login;
+            });
+
             return update(state, {
                 favorites : {
-                    [action.user.login] : {
-                        $set : null
-                    }
+                    $set : _update
                 }
             })
 
