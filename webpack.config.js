@@ -28,7 +28,10 @@ module.exports = {
         })
     ],
     resolve: {
-        extensions: ['', '.js', '.jsx']
+        root: __dirname,
+        alias: {
+            applicationStyles: 'client/styles/app.scss',
+        }
     },
     module: {
         loaders: [
@@ -36,7 +39,22 @@ module.exports = {
                 test: /\.jsx?$/,
                 exclude: /node_modules|build/,
                 loader: 'babel-loader?cacheDirectory=true'
-            }
+            },{
+                test: /\.(ttf|eot|woff|woff2|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                loader: 'file-loader'
+            }, {
+                test: /\.less$/,
+                loader: 'style-loader!css-loader!less-loader'
+            }, {
+                test: /\.css$/,
+                loader: "style-loader!css-loader!postcss-loader"
+            }, {
+                test: /\.json$/,
+                loader: 'json-loader'
+            }, {
+                test: /\.(png|jpg)$/,
+                loader: 'url-loader?limit=8192'
+            },
         ]
     },
     devtool: 'sourcemap'
