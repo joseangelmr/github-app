@@ -6,7 +6,8 @@ const express = require('express');
 const config = require('./../webpack.config.js');
 const app = express();
 const compiler = webpack(config);
-const since = 0;
+const redis = require("redis");
+const client = redis.createClient();
 
 function getUsers(query) {
     const URL = 'https://api.github.com/users'
@@ -28,6 +29,10 @@ function searchUsers(query) {
     })
 }
 
+client.on("error", function (err) {
+    console.log("Error " + err);
+});
+
 app.use(require('webpack-dev-middleware')(compiler, {
     publicPath: config.output.publicPath
 }));
@@ -39,14 +44,27 @@ app.get('/', function (req, res) {
 });
 
 app.post('/users', function (req, res) {
-    getUsers(req.query)
-        .then(response => {
-            res.send(response.body)
-        })
-        .catch(error => {
-            console.log('err', error)
-            res.send(error);
-        });
+
+    client.get(req.query.since, (error, result)=>{
+
+        if (result) {
+            console.log('cache data for since: ', req.query.since)
+            res.send(JSON.parse(result))
+        }
+        else {
+            console.log('request data for since: ', req.query.since)
+            getUsers(req.query)
+                .then(response => {
+                    client.set(req.query.since, JSON.stringify(response.body))
+                    res.send(response.body)
+                })
+                .catch(error => {
+                    console.log('err', error)
+                    res.send(error);
+                });
+        }
+    })
+
 })
 
 app.get('/search/users', function (req, res) {
